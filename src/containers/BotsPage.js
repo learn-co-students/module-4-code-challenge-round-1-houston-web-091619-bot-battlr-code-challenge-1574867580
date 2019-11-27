@@ -1,6 +1,8 @@
 import React from "react";
 import BotCollection from "./BotCollection"
 import YourBotArmy from "./YourBotArmy"
+import BotSpecs from "../components/BotSpecs"
+import Search from "../components/Search"
 class BotsPage extends React.Component {
   //start here with your code for step one
 
@@ -9,7 +11,10 @@ class BotsPage extends React.Component {
     this.state={
       bots:[],
       displayBots:[],
-      myBots:[]
+      myBots:[],
+      currentBot:null,
+      checkSpec:false,
+      serachText:''
     }
   }
   componentDidMount(){
@@ -34,11 +39,6 @@ class BotsPage extends React.Component {
       })
     }
   }
-    
-  // let usersOnline = this.state.users.filter(user => {
-  //   return user.online === true;  /* can use just - (return user.online),
-  //                                    put for your  reference. */
-  // }) ; 
 
   removeBot=(bot)=>{
     console.log(bot)
@@ -47,15 +47,40 @@ class BotsPage extends React.Component {
       myBots:newList
     })
   }
+
+  searchBot=()=>{
+    console.log('searching')
+  }
+
+  handleViewSpec =(bot)=>{
+    this.setState({
+      currentBot:bot,
+      checkSpec:!this.state.checkSpec
+    })
+  }
+
   render() {
+    
     return (
       <div>
         {<YourBotArmy 
           bots={this.state.myBots}
           removeBot={this.removeBot}/>}
-        {<BotCollection 
-          bots={this.state.displayBots}
-          addBot={this.addBot}/>}
+        {this.state.checkSpec?
+          <div>
+            <BotSpecs 
+             bot={this.state.currentBot}
+             addBot={this.addBot}
+             handleViewSpec={this.handleViewSpec}/>
+          </div> 
+          :
+          <div>
+            <Search />
+            <BotCollection 
+            bots={this.state.displayBots}
+            addBot={this.addBot}
+            handleViewSpec={this.handleViewSpec}/>
+          </div>}
       </div>
     );
   }
